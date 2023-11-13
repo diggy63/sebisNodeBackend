@@ -8,9 +8,13 @@ const app = express();
 
 app.use(express.json());
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 //our route definitions
+app.get('/', (req, res) => {
+  res.send('server running')
+})
+
 app.use("/auth", require("./routes/api/user"));
 
 app.listen(PORT, (error) => {

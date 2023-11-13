@@ -7,7 +7,33 @@ module.exports = {
   signup,
   find,
   login,
+  get,
 };
+
+async function get(req,res){
+  let token = req.get("Authorization") || req.query.token || req.body.token;
+  if (token) {
+    // Remove the 'Bearer ' if it was included in the token header
+    token = token.replace("Bearer ", "");
+    // Check if token is valid and not expired
+    jwt.verify(token, SECRET, function (err, decoded) {
+      if (err) {
+        console.log(err)
+        res.status(404).json({token:"not found"})
+      } else {
+        // It's a valid token, so add user to req
+        delete decoded.user.password
+        user = decoded.user
+        res.status(200).json(user)
+      }
+    });
+  }else{
+    res.status(200).json({result:"not found"})
+  }
+
+  
+
+}
 
 async function signup(req, res) {
   console.log(req.body);
