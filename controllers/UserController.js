@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const SECRET = process.env.SECRET;
+const PW_SECRET = process.env.PASSWORD_SECRET;
 
 module.exports = {
   test,
@@ -10,7 +11,7 @@ module.exports = {
   get,
 };
 
-async function get(req,res){
+async function get(req, res) {
   let token = req.get("Authorization") || req.query.token || req.body.token;
   if (token) {
     // Remove the 'Bearer ' if it was included in the token header
@@ -18,34 +19,34 @@ async function get(req,res){
     // Check if token is valid and not expired
     jwt.verify(token, SECRET, function (err, decoded) {
       if (err) {
-        console.log(err)
-        res.status(404).json({token:"not found"})
+        console.log(err);
+        res.status(404).json({ token: "not found" });
       } else {
         // It's a valid token, so add user to req
-        delete decoded.user.password
-        user = decoded.user
-        res.status(200).json(user)
+        delete decoded.user.password;
+        user = decoded.user;
+        res.status(200).json(user);
       }
     });
-  }else{
-    res.status(200).json({result:"not found"})
+  } else {
+    res.status(200).json({ result: "not found" });
   }
-
-  
-
 }
 
 async function signup(req, res) {
   console.log(req.body);
-  try {
-    const new_user = new User({ ...req.body });
-    await new_user.save();
-    console.log(new_user);
-    const token = createJWT(new_user);
-    res.status(201).json({ token });
-  } catch (error) {
-    console.log(error);
-    res.status(401).json(error);
+  if (req.body.secret == PW_SECRET) {
+    console.log("passed");
+    try {
+      const new_user = new User({ ...req.body });
+      await new_user.save();
+      const token = createJWT(new_user);
+      res.status(201).json({ token });
+    } catch (error) {
+      res.status(401).json(error);
+    }
+  } else {
+    res.status(401).json({ msg: "bad secret" });
   }
 }
 
