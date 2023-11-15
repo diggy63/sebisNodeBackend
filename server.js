@@ -11,11 +11,12 @@ app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
 //our route definitions
-app.get('/', (req, res) => {
-  res.send('server running')
-})
+app.get("/", (req, res) => {
+  res.send("server running");
+});
 
 app.use("/auth", require("./routes/api/user"));
+app.use("/gallery", require("./routes/api/gallery"));
 
 app.listen(PORT, (error) => {
   if (!error)
