@@ -8,7 +8,7 @@ const carouselPhotoSchema = new mongoose.Schema(
     photoUrl: String,
   },
   {
-    timestamp: true,
+    timestamps: true,
   }
 );
 

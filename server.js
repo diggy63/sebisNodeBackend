@@ -18,6 +18,7 @@ app.get("/", (req, res) => {
 app.use("/auth", require("./routes/api/user"));
 app.use("/gallery", require("./routes/api/gallery"));
 app.use("/carousel", require("./routes/api/carousel"));
+app.use("/catering", require("./routes/api/catering.js"));
 
 app.listen(PORT, (error) => {
   if (!error)

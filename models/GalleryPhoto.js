@@ -6,7 +6,7 @@ const galleryPhotoSchema = new mongoose.Schema(
     photoUrl: String,
   },
   {
-    timestamp: true,
+    timestamps: true,
   }
 );
 
